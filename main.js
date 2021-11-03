@@ -1,81 +1,97 @@
-let playerX = 100,
-	playerY = 100,
-	playerWidth = 64,
-	playerHeight = 70;
+let player, playerX, playerY, playerWidth, playerHeight;
+let coin,coinX, coinY, coinWidth, coinHeight;
+let score, coinCount;
+let coinSound, victorySound;
 
-let player = document.querySelector('#player');
+function onLoad() {
+	player = document.querySelector('#player');
+	coin = document.querySelector('#coin');
+	score = document.querySelector('#score');
+	coinSound = document.querySelector('#coinsound');
+	victorySound = document.querySelector('#victorysound');
 
-let coinX = 0,
-	coinY = 0,
-	coinWidth = 36,
-	coinHeight = 36;
+	coinCount = 0;
 
-let coin = document.querySelector('#coin');
+	playerWidth = player.width;
+	playerHeight = player.height;
 
-initialisePlayerLocation();
+	playerX = Math.round(window.innerWidth / 2 - playerWidth / 2);
+	playerY = Math.round(window.innerHeight / 2 - playerHeight / 2);
 
-initialiseCoinLocation();
+	initialisePlayerLocation();
 
+	coinWidth = coin.width;
+	coinHeight = coin.height;
 
-function keyDown(event) {
+	newCoin();
+}
 
-	if (event.key === 'ArrowRight') {
-		playerX = playerX + 20;
+function initialisePlayerLocation() {
 
-		if (playerX > window.innerWidth - playerWidth) {
-			playerX = window.innerWidth - playerWidth;
-		}
+	player.style.left = playerX + 'px';
+	player.style.top = playerY + 'px';
 
-		player.src = 'pictures/player-right.png';
-	}
+}
 
+function newCoin() {
+	coinX = Math.round(Math.random() * (window.innerWidth - coinWidth));
+	coinY = Math.round(Math.random() * (window.innerHeight - coinHeight));
+	coin.style.left = coinX + 'px';
+	coin.style.top = coinY + 'px';
+}
+
+function onKeyDown(event) {
 	if (event.key === 'ArrowLeft') {
-		playerX = playerX - 20;
-
+		playerX -= 10;
 		if (playerX < 0) {
 			playerX = 0;
 		}
-
 		player.src = 'pictures/player-left.png';
 	}
 
-	if (event.key === 'ArrowDown') {
-		playerY = playerY + 20;
-
-		if (playerY > window.innerHeight - playerHeight) {
-			playerY = window.innerHeight - playerHeight;
+	if (event.key === 'ArrowRight') {
+		playerX += 10;
+		if (playerX + playerWidth > window.innerWidth) {
+			playerX = window.innerWidth - playerWidth;
 		}
-
-		player.src = 'pictures/player.png';
+		player.src = 'pictures/player-right.png';
 	}
 
 	if (event.key === 'ArrowUp') {
-		playerY = playerY - 20;
-
+		playerY -= 10;
 		if (playerY < 0) {
 			playerY = 0;
 		}
-
 		player.src = 'pictures/player-up.png';
 	}
 
+	if (event.key === 'ArrowDown') {
+		playerY += 10;
+		if (playerY + playerHeight > window.innerHeight) {
+			playerY = window.innerHeight - playerHeight;
+		}
+		player.src = 'pictures/player.png';
+	}
+
 	initialisePlayerLocation();
+	coinCollision();
 }
 
-
-
-
-function initialisePlayerLocation() {
-	// where the player is going to be located when the game begins
-	player.style.left = playerX + 'px';
-	player.style.top = playerY + 'px';
+// when the player meet the coin at the same point
+function coinCollision() {
+	if (!(playerX + playerWidth < coinX || coinX + coinWidth < playerX || playerY + playerHeight < coinY || coinY + coinHeight < playerY)) {
+		coinSound.play();
+		addScore();
+		newCoin();
+	}
 }
 
-function initialiseCoinLocation() {
-	// randon generator of coin location when the games begins
-	coinX = Math.floor(Math.random() * (window.innerWidth - coinWidth));
-	coinY = Math.floor(Math.random() * (window.innerHeight - coinHeight));
+function addScore() {
+	coinCount++;
+	score.innerText = coinCount;
 
-	coin.style.left = coinX + 'px';
-	coin.style.top = coinY + 'px';
+	if (coinCount === 5) {
+		victorySound.play();
+		alert('You won!');
+	}
 }

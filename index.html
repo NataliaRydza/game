@@ -12,18 +12,18 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
 
-  <body onkeydown="keyDown(event)">
+  <body onload="onLoad();" onkeydown="onKeyDown(event);">
     <div id="score">0</div>
 
     <img id="coin" src="pictures/coin.png" alt="Coin" />
 
     <img id="player" src="pictures/player.png" alt="Player" />
 
-    <!-- <audio id="music" src="sounds/music.mp3" autoplay loop></audio>
+    <audio id="music" src="sounds/music.mp3" autoplay loop></audio>
 
-	<audio id="coinsound" src="sounds/coin.mp3"></audio>
+    <audio id="coinsound" src="sounds/coin.mp3"></audio>
 
-	<audio id="victorysound" src="sounds/victory.mp3"></audio> -->
+    <audio id="victorysound" src="sounds/victory.mp3"></audio>
 
     <script src="main.js"></script>
   </body>
